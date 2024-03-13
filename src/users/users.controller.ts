@@ -6,55 +6,62 @@ import {
   Body,
   Param,
   Patch,
+  UseGuards,
 } from '@nestjs/common';
-import { UserService } from '@src/user/user.service';
-import { CreateUserDto } from '@src/user//dto/create-user.dto';
-import { UpdateUserDto } from '@src/user/dto/update-user.dto';
+import { AuthGuard } from '@src/auth/auth.guard';
+import { UsersService } from '@src/users/users.service';
+import { CreateUserDto } from '@src/users/dto/create-user.dto';
+import { UpdateUserDto } from '@src/users/dto/update-user.dto';
 
 @Controller('users')
-export class UserController {
+export class UsersController {
   /**
    * Create a new instance for UserService.
    */
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly usersService: UsersService) {}
 
   /**
    * Create a new user into collection.
    */
+  @UseGuards(AuthGuard)
   @Post()
   public create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    return this.usersService.create(createUserDto);
   }
 
   /**
    * Get all users from collection.
    */
+  @UseGuards(AuthGuard)
   @Get()
   public findAll() {
-    return this.userService.findAll();
+    return this.usersService.findAll();
   }
 
   /**
    * Find one user from collection.
    */
+  @UseGuards(AuthGuard)
   @Get(':id')
   public findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
+    return this.usersService.findOneById(id);
   }
 
   /**
    * Update one user from collection.
    */
+  @UseGuards(AuthGuard)
   @Patch(':id')
   public update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, updateUserDto);
+    return this.usersService.update(id, updateUserDto);
   }
 
   /**
    * Delete one user from collection.
    */
+  @UseGuards(AuthGuard)
   @Delete(':id')
   public delete(@Param('id') id: string) {
-    return this.userService.delete(id);
+    return this.usersService.delete(id);
   }
 }
