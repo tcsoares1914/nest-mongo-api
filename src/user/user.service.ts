@@ -7,12 +7,15 @@ import { UpdateUserDto } from '@src/user/dto/update-user.dto';
 
 @Injectable()
 export class UserService {
+  /**
+   * Create a new instance for Model.
+   */
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   /**
    * Create a new user into collection.
    */
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  public async create(createUserDto: CreateUserDto): Promise<User> {
     const createdUser = new this.userModel(createUserDto);
 
     return createdUser.save();
@@ -28,7 +31,7 @@ export class UserService {
   /**
    * Find one user from collection.
    */
-  async findOne(id: string): Promise<User> {
+  public async findOne(id: string): Promise<User> {
     const user = await this.userModel
       .findOne({
         _id: id,
@@ -45,7 +48,7 @@ export class UserService {
   /**
    * Update one user from collection.
    */
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+  public async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     const user = this.userModel.findByIdAndUpdate(id, updateUserDto).exec();
 
     if (!user) {
@@ -58,7 +61,7 @@ export class UserService {
   /**
    * Delete one user from collection.
    */
-  async delete(id: string): Promise<User> {
+  public async delete(id: string): Promise<User> {
     const user = await this.userModel.findByIdAndDelete(id).exec();
 
     if (!user) {
